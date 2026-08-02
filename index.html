@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALISSQ - Неко Ведьмочка</title>
+    
+    <!-- Иконка сайта (Favicon) -->
+    <link rel="icon" href="file/photo_2026-03-11_18-52-44.png" type="image/jpeg">
+    
     <!-- Шрифты -->
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -75,7 +79,7 @@
         .container {
             width: 90%;
             max-width: 1000px; 
-            margin-top: 80px; /* Сдвинули чуть ниже от края экрана */
+            margin-top: 80px;
             margin-bottom: 80px;
             display: flex;
             flex-direction: column;
@@ -95,10 +99,10 @@
             background-color: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 12px 32px; /* Крупнее */
+            padding: 12px 32px;
             border-radius: 40px;
             font-family: var(--font-text);
-            font-size: 16px; /* Крупнее */
+            font-size: 16px;
             cursor: pointer;
             transition: all 0.4s var(--pop-ease);
             display: flex;
@@ -156,7 +160,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 35px; /* Больше расстояние между авой и ником */
+            gap: 35px;
             margin-bottom: 40px;
         }
 
@@ -169,7 +173,7 @@
         }
 
         .avatar {
-            width: 180px; /* Крупная аватарка для ПК */
+            width: 180px; 
             height: 180px;
             border-radius: 50%;
             object-fit: cover;
@@ -186,7 +190,7 @@
 
         .profile-header h1 {
             font-family: var(--font-heading);
-            font-size: 72px; /* Массивный текст для ПК */
+            font-size: 72px; 
             font-weight: 700;
             margin: 0;
             letter-spacing: 2px;
@@ -203,7 +207,7 @@
         .social-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px; /* Больше отступы */
+            gap: 20px; 
             justify-content: center;
         }
 
@@ -214,9 +218,9 @@
             border: 1px solid rgba(255, 255, 255, 0.15); 
             color: var(--text-main);
             text-decoration: none;
-            padding: 16px 36px; /* Огромные кнопки для мышки */
+            padding: 16px 36px; 
             border-radius: 50px; 
-            font-size: 18px; /* Крупный текст */
+            font-size: 18px; 
             font-weight: 500;
             transition: all 0.4s var(--pop-ease);
             display: flex;
@@ -225,7 +229,7 @@
         }
 
         .social-btn i {
-            font-size: 24px; /* Крупные иконки */
+            font-size: 24px; 
             color: inherit;
         }
 
@@ -246,14 +250,14 @@
         .home-description p {
             color: var(--text-muted);
             line-height: 1.9;
-            font-size: 20px; /* Крупный текст для монитора */
+            font-size: 20px; 
             margin-bottom: 10px;
         }
 
         /* --- СЕКЦИИ (КОМПИК И ПРАВИЛА) --- */
         .section-title {
             font-family: var(--font-heading);
-            font-size: 42px; /* Крупнее */
+            font-size: 42px; 
             text-align: center;
             margin-bottom: 50px;
             font-weight: 700;
@@ -270,10 +274,10 @@
         }
 
         .specs-table th, .specs-table td {
-            padding: 20px 15px; /* Больше отступов */
+            padding: 20px 15px; 
             border-bottom: 1px solid var(--border-color);
             text-align: left;
-            font-size: 18px; /* Крупнее */
+            font-size: 18px; 
         }
 
         .specs-table th {
@@ -294,7 +298,7 @@
             padding: 0;
             color: var(--text-main);
             line-height: 2.2;
-            font-size: 18px; /* Крупнее */
+            font-size: 18px; 
             text-align: center;
         }
 
@@ -347,7 +351,6 @@
 
         /* =========================================
            АДАПТИВНОСТЬ ДЛЯ ТЕЛЕФОНОВ
-           Возвращаем идеальные мобильные размеры
            ========================================= */
         @media (max-width: 768px) {
             .container {
@@ -365,19 +368,15 @@
                 margin-bottom: 25px;
             }
 
-            /* Возвращаем прежний размер аватарки */
             .avatar { width: 130px; height: 130px; }
-            /* Возвращаем прежний размер текста */
             .profile-header h1 { font-size: 50px; }
 
             .social-section { margin-bottom: 30px; }
             .social-grid { gap: 12px; }
             
-            /* Возвращаем прежний размер соц. кнопок */
             .social-btn { padding: 12px 24px; font-size: 14px; }
             .social-btn i { font-size: 18px; }
 
-            /* Возвращаем прежний размер описания */
             .home-description p { font-size: 15px; }
 
             .section-title { font-size: 32px; margin-bottom: 30px; }
@@ -425,7 +424,7 @@
                 <!-- Шапка с аватаркой и именем -->
                 <div class="profile-header">
                     <a href="https://www.twitch.tv/allssq" target="_blank" class="avatar-link">
-                        <img src="file/Gemini_Generated_Image_g3twujg3twujg3tw.png" alt="ALISSQ" class="avatar">
+                        <img src="file/photo_2026-07-05_01-19-35.jpg" alt="ALISSQ" class="avatar">
                     </a>
                     <h1>ALISSQ</h1>
                 </div>
