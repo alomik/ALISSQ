@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALISSQ - Неко Ведьмочка</title>
+    <!-- Шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0a0612;
+            --text-main: #f5eeff;
+            --text-muted: #b19ecd;
+            --border-color: rgba(255, 105, 180, 0.2);
+            --neon-pink: #ff59c7; 
+            --neon-glow: rgba(255, 89, 199, 0.3);
+            --font-heading: 'Lora', serif;
+            --font-text: 'Inter', sans-serif;
+            --pop-ease: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-text);
+            color: var(--text-main);
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            
+            /* --- ЗВЕЗДНЫЙ ФОН --- */
+            background-image: 
+                radial-gradient(1px 1px at 10% 20%, #ffffff, transparent),
+                radial-gradient(1px 1px at 30% 65%, #ffb3e6, transparent),
+                radial-gradient(1.5px 1.5px at 50% 35%, #ffffff, transparent),
+                radial-gradient(1px 1px at 70% 80%, #e6b3ff, transparent),
+                radial-gradient(1.5px 1.5px at 90% 15%, #ffffff, transparent),
+                radial-gradient(1.5px 1.5px at 15% 75%, #ffffff, transparent),
+                radial-gradient(2px 2px at 45% 25%, #ffb3e6, transparent),
+                radial-gradient(1.5px 1.5px at 85% 55%, #e6b3ff, transparent),
+                radial-gradient(2px 2px at 25% 10%, #ffffff, transparent),
+                radial-gradient(2.5px 2.5px at 25% 45%, #ffffff, transparent),
+                radial-gradient(3px 3px at 65% 85%, #ffb3e6, transparent),
+                radial-gradient(2.5px 2.5px at 80% 20%, #ffffff, transparent);
+
+            background-size: 
+                250px 250px, 250px 250px, 250px 250px, 250px 250px, 250px 250px,
+                400px 400px, 400px 400px, 400px 400px, 400px 400px,
+                600px 600px, 600px 600px, 600px 600px;
+                
+            animation: magicParallax 150s linear infinite;
+        }
+
+        @keyframes magicParallax {
+            0% { 
+                background-position: 
+                    0 0, 0 0, 0 0, 0 0, 0 0,
+                    0 0, 0 0, 0 0, 0 0,
+                    0 0, 0 0, 0 0; 
+            }
+            100% { 
+                background-position: 
+                    -250px 500px, -250px 500px, -250px 500px, -250px 500px, -250px 500px,
+                    -400px 800px, -400px 800px, -400px 800px, -400px 800px,
+                    -600px 1200px, -600px 1200px, -600px 1200px;
+            }
+        }
+
+        /* Увеличили максимальную ширину контейнера для ПК */
+        .container {
+            width: 90%;
+            max-width: 1000px; 
+            margin-top: 80px; /* Сдвинули чуть ниже от края экрана */
+            margin-bottom: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- НАВИГАЦИЯ (КРУПНЕЕ ДЛЯ ПК) --- */
+        .nav-tabs {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+
+        .nav-btn {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 32px; /* Крупнее */
+            border-radius: 40px;
+            font-family: var(--font-text);
+            font-size: 16px; /* Крупнее */
+            cursor: pointer;
+            transition: all 0.4s var(--pop-ease);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            will-change: transform, box-shadow;
+        }
+
+        .nav-btn i {
+            font-size: 14px;
+            color: inherit;
+        }
+
+        .nav-btn:hover {
+            color: #ffffff;
+            border-color: var(--neon-pink);
+            background-color: rgba(255, 89, 199, 0.08); 
+            transform: translateY(-4px); 
+            box-shadow: 0 8px 15px var(--neon-glow); 
+        }
+
+        .nav-btn.active {
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
+            text-shadow: 0 0 8px var(--neon-glow);
+            background-color: rgba(255, 89, 199, 0.05);
+        }
+
+        .tab-content {
+            display: none;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: contentFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes contentFadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- ГЛАВНАЯ СТРАНИЦА (КРУПНЕЕ ДЛЯ ПК) --- */
+        .home-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 35px; /* Больше расстояние между авой и ником */
+            margin-bottom: 40px;
+        }
+
+        .avatar-link {
+            flex-shrink: 0;
+            display: block;
+            border-radius: 50%;
+            text-decoration: none;
+            outline: none;
+        }
+
+        .avatar {
+            width: 180px; /* Крупная аватарка для ПК */
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-color);
+            display: block;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+        }
+        
+        .avatar:hover {
+            transform: scale(1.05);
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 35px var(--neon-glow);
+        }
+
+        .profile-header h1 {
+            font-family: var(--font-heading);
+            font-size: 72px; /* Массивный текст для ПК */
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-shadow: 0 0 15px var(--neon-glow), 0 0 30px rgba(255, 89, 199, 0.4);
+        }
+
+        /* --- КНОПКИ СОЦСЕТЕЙ (КРУПНЕЕ ДЛЯ ПК) --- */
+        .social-section {
+            width: 100%;
+            margin-bottom: 45px;
+        }
+
+        .social-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px; /* Больше отступы */
+            justify-content: center;
+        }
+
+        .social-btn {
+            background-color: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(5px); 
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            color: var(--text-main);
+            text-decoration: none;
+            padding: 16px 36px; /* Огромные кнопки для мышки */
+            border-radius: 50px; 
+            font-size: 18px; /* Крупный текст */
+            font-weight: 500;
+            transition: all 0.4s var(--pop-ease);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .social-btn i {
+            font-size: 24px; /* Крупные иконки */
+            color: inherit;
+        }
+
+        .social-btn:hover {
+            color: #ffffff;
+            border-color: var(--neon-pink);
+            background-color: rgba(255, 89, 199, 0.15); 
+            transform: translateY(-5px) scale(1.03); 
+            box-shadow: 0 10px 30px var(--neon-glow); 
+        }
+
+        /* Описание */
+        .home-description {
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .home-description p {
+            color: var(--text-muted);
+            line-height: 1.9;
+            font-size: 20px; /* Крупный текст для монитора */
+            margin-bottom: 10px;
+        }
+
+        /* --- СЕКЦИИ (КОМПИК И ПРАВИЛА) --- */
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 42px; /* Крупнее */
+            text-align: center;
+            margin-bottom: 50px;
+            font-weight: 700;
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-glow);
+        }
+
+        .specs-table {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        .specs-table th, .specs-table td {
+            padding: 20px 15px; /* Больше отступов */
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+            font-size: 18px; /* Крупнее */
+        }
+
+        .specs-table th {
+            color: var(--text-main);
+            font-weight: 500;
+            width: 40%;
+        }
+
+        .specs-table td {
+            color: var(--neon-pink); 
+            font-weight: 500;
+        }
+
+        .rules-list {
+            max-width: 700px;
+            margin: 0 auto;
+            list-style: none;
+            padding: 0;
+            color: var(--text-main);
+            line-height: 2.2;
+            font-size: 18px; /* Крупнее */
+            text-align: center;
+        }
+
+        .rules-list li {
+            margin-bottom: 18px;
+            padding: 18px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .cute-rule {
+            color: var(--neon-pink);
+            font-weight: bold;
+        }
+
+        /* --- КНОПКА "НАВЕРХ" --- */
+        #scrollTopBtn {
+            display: none; 
+            position: fixed;
+            bottom: 25px;
+            right: 20px;
+            z-index: 99;
+            background-color: rgba(255, 89, 199, 0.15);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid var(--neon-pink);
+            color: #ffffff;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 20px;
+            box-shadow: 0 4px 15px var(--neon-glow);
+            transition: all 0.4s var(--pop-ease);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px) scale(0.8);
+        }
+
+        #scrollTopBtn.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+        }
+
+        @media (min-width: 769px) {
+            #scrollTopBtn { display: none !important; }
+        }
+
+        /* =========================================
+           АДАПТИВНОСТЬ ДЛЯ ТЕЛЕФОНОВ
+           Возвращаем идеальные мобильные размеры
+           ========================================= */
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 40px;
+                margin-bottom: 40px;
+            }
+
+            .nav-tabs { margin-bottom: 40px; gap: 10px; }
+            .nav-btn { padding: 10px 20px; font-size: 14px; }
+            .nav-btn i { font-size: 12px; }
+
+            .profile-header {
+                flex-direction: column; 
+                gap: 15px;
+                margin-bottom: 25px;
+            }
+
+            /* Возвращаем прежний размер аватарки */
+            .avatar { width: 130px; height: 130px; }
+            /* Возвращаем прежний размер текста */
+            .profile-header h1 { font-size: 50px; }
+
+            .social-section { margin-bottom: 30px; }
+            .social-grid { gap: 12px; }
+            
+            /* Возвращаем прежний размер соц. кнопок */
+            .social-btn { padding: 12px 24px; font-size: 14px; }
+            .social-btn i { font-size: 18px; }
+
+            /* Возвращаем прежний размер описания */
+            .home-description p { font-size: 15px; }
+
+            .section-title { font-size: 32px; margin-bottom: 30px; }
+            
+            .specs-table th, .specs-table td {
+                font-size: 15px;
+                display: block;
+                width: 100%;
+                text-align: center;
+                border: none;
+                padding: 8px;
+            }
+            .specs-table tr {
+                border-bottom: 1px solid var(--border-color);
+                display: block;
+                padding: 15px 0;
+            }
+
+            .rules-list { font-size: 15px; }
+            .rules-list li { padding: 12px; margin-bottom: 12px; }
+
+            #scrollTopBtn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- Навигация -->
+        <nav class="nav-tabs">
+            <button class="nav-btn active" onclick="openTab('home')">Обо мне <i class="fa-solid fa-heart"></i></button>
+            <button class="nav-btn" onclick="openTab('pc')">Компик <i class="fa-solid fa-desktop"></i></button>
+            <button class="nav-btn" onclick="openTab('rules')">Правила <i class="fa-solid fa-scroll"></i></button>
+        </nav>
+
+        <!-- Вкладка: ОБО МНЕ И СВЯЗЬ -->
+        <section id="home" class="tab-content active">
+            <div class="home-wrapper">
+                
+                <!-- Шапка с аватаркой и именем -->
+                <div class="profile-header">
+                    <a href="https://www.twitch.tv/allssq" target="_blank" class="avatar-link">
+                        <img src="file/Gemini_Generated_Image_g3twujg3twujg3tw.png" alt="ALISSQ" class="avatar">
+                    </a>
+                    <h1>ALISSQ</h1>
+                </div>
+
+                <!-- Кнопки соцсетей в линию (СРАЗУ ПОД ИМЕНЕМ) -->
+                <div class="social-section">
+                    <div class="social-grid">
+                        <a href="https://t.me/alissa952music" target="_blank" class="social-btn">Telegram <i class="fa-brands fa-telegram"></i></a>
+                        <a href="https://www.twitch.tv/allssq" target="_blank" class="social-btn">Twitch <i class="fa-brands fa-twitch"></i></a>
+                        <a href="https://discord.com/invite/fK8EUmZMh6" target="_blank" class="social-btn">Discord <i class="fa-brands fa-discord"></i></a>
+                        <a href="https://www.donationalerts.com/r/alissq" target="_blank" class="social-btn">Донат <i class="fa-solid fa-gem"></i></a>
+                        <a href="https://memealerts.com/69b258dd759170295657fe4c" target="_blank" class="social-btn">Meme Alert <i class="fa-solid fa-face-laugh-squint"></i></a>
+                        <a href="https://fetta.app/u/ALISSQ" target="_blank" class="social-btn">Fetta <i class="fa-solid fa-heart"></i></a>
+                        <a href="https://dalink.to/alissq" target="_blank" class="social-btn">DaLink <i class="fa-solid fa-link"></i></a>
+                    </div>
+                </div>
+
+                <!-- Описание по центру (ПОД ССЫЛКАМИ) -->
+                <div class="home-description">
+                    <p>Привет! меня зовут Алиса, я неко ведьмочка, я очень болтливая, и я люблю играть в стратегии и пазлы, и писать музыку! </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Вкладка: КОМПИК -->
+        <section id="pc" class="tab-content">
+            <h2 class="section-title">КОМПИК</h2>
+            <table class="specs-table">
+                <tr>
+                    <th>ЦП</th>
+                    <td>RYZEN 7 5700 3.70Hz</td>
+                </tr>
+                <tr>
+                    <th>Видеокарта</th>
+                    <td>Radeon RX 580</td>
+                </tr>
+                <tr>
+                    <th>ОЗУ</th>
+                    <td>16гб</td>
+                </tr>
+                <tr>
+                    <th>Гр. планшет</th>
+                    <td>Gaomon m106k</td>
+                </tr>
+                <tr>
+                    <th>Аудиокарта</th>
+                    <td>Audient ID 14 mk2</td>
+                </tr>
+                <tr>
+                    <th>Микрофон</th>
+                    <td>BM-800</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Вкладка: ПРАВИЛА -->
+        <section id="rules" class="tab-content">
+            <h2 class="section-title">ПРАВИЛА</h2>
+            <ul class="rules-list">
+                <li>Спамить нельзя ❌</li>
+                <li>Токсичить нельзя 🤬</li>
+                <li>Драца нельзя ⚔️</li>
+                <li>Запретки говорить нельзя 🙊</li>
+                <li class="cute-rule">Кусаца можна 🦇</li>
+            </ul>
+        </section>
+
+    </div>
+
+    <!-- КНОПКА "НАВЕРХ" -->
+    <button id="scrollTopBtn" onclick="scrollToTop()" title="Вернуться наверх">
+        <i class="fa-solid fa-chevron-up"></i>
+    </button>
+
+    <script>
+        function openTab(tabId) {
+            let contents = document.querySelectorAll('.tab-content');
+            let buttons = document.querySelectorAll('.nav-btn');
+
+            contents.forEach(tab => tab.classList.remove('active'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        let topButton = document.getElementById("scrollTopBtn");
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 150 || document.documentElement.scrollTop > 150) {
+                topButton.classList.add("show"); 
+            } else {
+                topButton.classList.remove("show"); 
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
