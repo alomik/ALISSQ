@@ -5,21 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALISSQ - Неко Ведьмочка</title>
     
-    
     <link rel="icon" href="file/photo_2026-03-11_18-52-44.png" type="image/jpeg">
-    
 
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-color: #0a0612;
-            --text-main: #f5eeff;
-            --text-muted: #b19ecd;
-            --border-color: rgba(255, 105, 180, 0.2);
-            --neon-pink: #ff59c7; 
-            --neon-glow: rgba(255, 89, 199, 0.3);
+            --bg-color: #0D1117; 
+            --text-main: #F0F4F8;
+            --text-muted: #8b9bb4;
+            --border-color: #1f3b8a;
+            --neon-primary: #4361EE; 
+            --neon-pink: #F72585; 
+            --neon-glow: rgba(67, 97, 238, 0.6);
+            --neon-glow-pink: rgba(247, 37, 133, 0.5);
+            --btn-bg: radial-gradient(circle at 50% 0%, #0a194e, #03081a);
+            
             --font-heading: 'Lora', serif;
             --font-text: 'Inter', sans-serif;
             --pop-ease: cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -42,27 +44,23 @@
             align-items: center;
             overflow-x: hidden;
             cursor: none;
-            
-
             background-image: 
-                radial-gradient(1px 1px at 10% 20%, #ffffff, transparent),
-                radial-gradient(1px 1px at 30% 65%, #ffb3e6, transparent),
-                radial-gradient(1.5px 1.5px at 50% 35%, #ffffff, transparent),
-                radial-gradient(1px 1px at 70% 80%, #e6b3ff, transparent),
+                radial-gradient(1.5px 1.5px at 10% 20%, #ffffff, transparent),
+                radial-gradient(2px 2px at 30% 65%, #4361EE, transparent),
+                radial-gradient(1px 1px at 50% 35%, #ffffff, transparent),
+                radial-gradient(2px 2px at 70% 80%, #F72585, transparent),
                 radial-gradient(1.5px 1.5px at 90% 15%, #ffffff, transparent),
-                radial-gradient(1.5px 1.5px at 15% 75%, #ffffff, transparent),
-                radial-gradient(2px 2px at 45% 25%, #ffb3e6, transparent),
-                radial-gradient(1.5px 1.5px at 85% 55%, #e6b3ff, transparent),
+                radial-gradient(1px 1px at 15% 75%, #4361EE, transparent),
+                radial-gradient(2.5px 2.5px at 45% 25%, #4361EE, transparent),
+                radial-gradient(1.5px 1.5px at 85% 55%, #F72585, transparent),
                 radial-gradient(2px 2px at 25% 10%, #ffffff, transparent),
-                radial-gradient(2.5px 2.5px at 25% 45%, #ffffff, transparent),
-                radial-gradient(3px 3px at 65% 85%, #ffb3e6, transparent),
-                radial-gradient(2.5px 2.5px at 80% 20%, #ffffff, transparent);
-
+                radial-gradient(1px 1px at 25% 45%, #ffffff, transparent),
+                radial-gradient(3px 3px at 65% 85%, #4361EE, transparent),
+                radial-gradient(1.5px 1.5px at 80% 20%, #ffffff, transparent);
             background-size: 
                 250px 250px, 250px 250px, 250px 250px, 250px 250px, 250px 250px,
                 400px 400px, 400px 400px, 400px 400px, 400px 400px,
                 600px 600px, 600px 600px, 600px 600px;
-                
             background-position: 0 0;
             will-change: background-position;
         }
@@ -71,55 +69,52 @@
             body { cursor: auto; }
         }
 
+        #fireTrailCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 999996;
+            mix-blend-mode: screen;
+            transition: opacity 0.2s ease;
+        }
 
         .magic-cursor {
             position: fixed;
             top: 0;
             left: 0;
-            width: 26px;
-            height: 26px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
-            border: 1px solid rgba(255, 89, 199, 0.55);
+            background: #141f62;
+            box-shadow: 0 0 12px rgb(22, 40, 121), 0 0 4px #243585;
             pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: width .25s var(--fluid-ease), height .25s var(--fluid-ease), border-color .25s ease, opacity .3s ease;
-            mix-blend-mode: screen;
+            z-index: 999999;
+            transform: translate3d(-50%, -50%, 0);
+            transition: opacity 0.15s ease, width 0.3s var(--pop-ease), height 0.3s var(--pop-ease), background-color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            will-change: transform, width, height;
+            border: 1px solid #233493;
         }
 
-        .magic-cursor::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--neon-glow) 0%, transparent 70%);
-            transform: scale(2.4);
+        .magic-cursor.hover {
+            width: 20px;
+            height: 20px;
+            background-color: rgba(67, 97, 238, 0.15);
+            border: 2px solid #4361EE;
+            box-shadow: 0 0 15px rgba(67, 97, 238, 0.9), inset 0 0 8px rgba(67, 97, 238, 0.6);
         }
 
-        .magic-cursor.hovering {
-            width: 46px;
-            height: 46px;
-            border-color: var(--neon-pink);
-        }
-
-        .cursor-glow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 480px;
-            height: 480px;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-            background: radial-gradient(circle, rgba(255, 89, 199, 0.10) 0%, transparent 65%);
-            transform: translate(-50%, -50%);
-            will-change: transform;
+        body.hide-cursor-mode .magic-cursor {
+            opacity: 0 !important;
+            transform: translate3d(-50%, -50%, 0) scale(0) !important;
         }
 
         @media (max-width: 768px), (hover: none) {
-            .magic-cursor, .cursor-glow { display: none; }
+            .magic-cursor, #fireTrailCanvas { display: none !important; }
         }
-
 
         .container {
             width: 90%;
@@ -133,7 +128,6 @@
             z-index: 1;
         }
 
-
         .reveal {
             opacity: 0;
             transform: translateY(18px);
@@ -145,7 +139,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-
         .nav-tabs {
             position: relative;
             display: flex;
@@ -155,36 +148,27 @@
             margin-bottom: 60px;
         }
 
-        .nav-indicator {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .nav-btn, .social-btn, .float-btn, .start-game-btn {
+            position: relative;
+            z-index: 1;
+            background: var(--btn-bg);
+            border: 1.5px solid var(--border-color);
+            color: var(--text-main);
             border-radius: 40px;
-            background: rgba(255, 89, 199, 0.10);
-            border: 1px solid var(--neon-pink);
-            box-shadow: 0 0 18px var(--neon-glow);
-            transition: transform .5s var(--fluid-ease), width .5s var(--fluid-ease), height .5s var(--fluid-ease), opacity .3s ease;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0;
+            font-family: var(--font-text);
+            cursor: none;
+            box-shadow: 0 4px 15px rgba(10, 25, 78, 0.6), inset 0 0 8px rgba(67, 97, 238, 0.2);
+            transition: color .4s var(--pop-ease), border-color .4s var(--pop-ease), background .4s var(--pop-ease), transform .4s var(--pop-ease), text-shadow .4s ease, box-shadow .4s var(--pop-ease);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            will-change: transform;
         }
 
         .nav-btn {
-            position: relative;
-            z-index: 1;
-            background-color: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
             padding: 12px 32px;
-            border-radius: 40px;
-            font-family: var(--font-text);
             font-size: 16px;
-            cursor: none;
-            transition: color .4s var(--pop-ease), border-color .4s var(--pop-ease), transform .4s var(--pop-ease);
-            display: flex;
-            align-items: center;
             gap: 10px;
-            will-change: transform;
         }
 
         .nav-btn i {
@@ -192,20 +176,34 @@
             color: inherit;
             transition: transform .4s var(--pop-ease);
         }
-
-        .nav-btn:hover {
-            color: #ffffff;
-            transform: translateY(-4px); 
+        
+        .nav-btn .fa-heart {
+            color: var(--neon-pink);
+            text-shadow: 0 0 8px var(--neon-glow-pink);
         }
 
-        .nav-btn:hover i {
+        .nav-btn:hover, .social-btn:hover, .float-btn:hover, .start-game-btn:hover {
+            color: #ffffff;
+            border-color: var(--neon-primary);
+            transform: translateY(-4px); 
+            text-shadow: 0 0 8px var(--neon-glow);
+            box-shadow: 0 0 25px var(--neon-glow), inset 0 0 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .nav-btn:hover i, .social-btn:hover i, .float-btn:hover i {
             transform: scale(1.15) rotate(-8deg);
+        }
+        
+        .nav-btn:hover .fa-heart {
+            color: #ffffff;
         }
 
         .nav-btn.active {
-            border-color: transparent;
-            color: var(--neon-pink);
-            text-shadow: 0 0 8px var(--neon-glow);
+            border-color: var(--neon-primary);
+            color: #ffffff;
+            text-shadow: 0 0 10px var(--neon-glow);
+            box-shadow: 0 0 25px var(--neon-glow), inset 0 0 15px rgba(67, 97, 238, 0.3);
+            font-weight: 500;
         }
 
         .tab-content {
@@ -216,7 +214,6 @@
         .tab-content.active {
             display: block;
         }
-
 
         .tab-content.enter {
             animation: tabIn .55s var(--fluid-ease) forwards;
@@ -233,7 +230,6 @@
             from { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
             to   { opacity: 0; transform: translateY(-10px) scale(.985); filter: blur(4px); }
         }
-
 
         .home-wrapper {
             display: flex;
@@ -257,13 +253,14 @@
             text-decoration: none;
             outline: none;
             position: relative;
+            cursor: none;
         }
 
         .avatar-ring {
             position: absolute;
             inset: -10px;
             border-radius: 50%;
-            border: 1px solid var(--neon-pink);
+            border: 1px solid var(--neon-primary);
             opacity: 0;
             transform: scale(0.9);
             pointer-events: none;
@@ -271,8 +268,9 @@
         }
 
         .avatar-link:hover .avatar-ring {
-            opacity: .55;
+            opacity: .8;
             transform: scale(1.06) rotate(8deg);
+            box-shadow: 0 0 20px var(--neon-glow);
         }
 
         .avatar {
@@ -288,7 +286,7 @@
         .avatar-link:hover .avatar {
             transform: scale(1.06) rotate(-2deg);
             border-color: var(--neon-pink);
-            box-shadow: 0 0 40px var(--neon-glow);
+            box-shadow: 0 0 40px var(--neon-glow-pink);
         }
 
         .profile-header h1 {
@@ -298,7 +296,7 @@
             margin: 0;
             letter-spacing: 2px;
             color: #ffffff;
-            text-shadow: 0 0 15px var(--neon-glow), 0 0 30px rgba(255, 89, 199, 0.4);
+            text-shadow: 0 0 15px var(--neon-glow-pink), 0 0 35px rgba(247, 37, 133, 0.4);
             background: linear-gradient(100deg, #ffffff 30%, var(--neon-pink) 50%, #ffffff 70%);
             background-size: 220% auto;
             -webkit-background-clip: text;
@@ -310,7 +308,6 @@
             0% { background-position: 0% 50%; }
             100% { background-position: -220% 50%; }
         }
-
 
         .social-section {
             width: 100%;
@@ -325,69 +322,33 @@
         }
 
         .social-btn {
-            position: relative;
-            overflow: hidden;
-            background-color: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(5px); 
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.15); 
-            color: var(--text-main);
             text-decoration: none;
             padding: 16px 36px;
             border-radius: 50px; 
             font-size: 18px;
             font-weight: 500;
-            transition: color .4s var(--pop-ease), border-color .4s var(--pop-ease), background-color .4s var(--pop-ease), transform .4s var(--pop-ease), box-shadow .4s var(--pop-ease);
-            display: flex;
-            align-items: center;
             gap: 14px;
-            cursor: none;
         }
 
         .social-btn i {
             font-size: 24px;
-            color: inherit;
-            transition: transform .4s var(--pop-ease);
         }
-
-        .social-btn:hover {
-            color: #ffffff;
-            border-color: var(--neon-pink);
-            background-color: rgba(255, 89, 199, 0.15); 
-            transform: translateY(-5px) scale(1.03); 
-            box-shadow: 0 10px 30px var(--neon-glow); 
-        }
-
-        .social-btn:hover i {
-            transform: scale(1.2) rotate(6deg);
-        }
-
-
-        .ripple-span {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.45);
-            transform: scale(0);
-            animation: rippleAnim .6s var(--fluid-ease) forwards;
-            pointer-events: none;
-        }
-        @keyframes rippleAnim {
-            to { transform: scale(1); opacity: 0; }
-        }
-
 
         .home-description {
             text-align: center;
             max-width: 900px;
+            background: radial-gradient(circle at 50% 0%, var(--glass-bg), transparent 70%);
+            padding: 20px;
+            border-radius: 20px;
         }
 
         .home-description p {
-            color: var(--text-muted);
+            color: var(--text-main);
             line-height: 1.9;
             font-size: 20px;
             margin-bottom: 10px;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         }
-
 
         .section-title {
             font-family: var(--font-heading);
@@ -396,8 +357,8 @@
             margin-bottom: 50px;
             font-weight: 700;
             color: transparent;
-            -webkit-text-stroke: 1.5px var(--neon-pink);
-            text-shadow: 0 0 10px var(--neon-glow);
+            -webkit-text-stroke: 1.5px var(--neon-primary);
+            text-shadow: 0 0 15px var(--neon-glow);
         }
 
         .specs-table {
@@ -405,6 +366,11 @@
             max-width: 700px;
             margin: 0 auto;
             border-collapse: collapse;
+            background: var(--btn-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(10, 25, 78, 0.6), inset 0 0 15px rgba(67, 97, 238, 0.15);
         }
 
         .specs-table tr {
@@ -428,10 +394,15 @@
         }
 
         .specs-table th, .specs-table td {
-            padding: 20px 15px;
+            padding: 20px 25px;
             border-bottom: 1px solid var(--border-color);
             text-align: left;
             font-size: 18px;
+        }
+
+        .specs-table tr:last-child th,
+        .specs-table tr:last-child td {
+            border-bottom: none;
         }
 
         .specs-table th {
@@ -441,8 +412,9 @@
         }
 
         .specs-table td {
-            color: var(--neon-pink); 
+            color: var(--neon-primary); 
             font-weight: 500;
+            text-shadow: 0 0 8px var(--neon-glow);
         }
 
         .rules-list {
@@ -459,12 +431,13 @@
         .rules-list li {
             margin-bottom: 18px;
             padding: 18px;
-            border: 1px solid var(--border-color);
+            border: 1.5px solid var(--border-color);
             border-radius: 12px;
-            background: rgba(255, 255, 255, 0.02);
+            background: var(--btn-bg);
             opacity: 0;
             transform: translateY(12px) scale(.97);
-            transition: border-color .4s ease, background-color .4s ease, transform .4s var(--pop-ease);
+            transition: border-color .4s ease, background .4s ease, transform .4s var(--pop-ease), box-shadow .4s ease;
+            box-shadow: 0 4px 15px rgba(10, 25, 78, 0.4), inset 0 0 10px rgba(67, 97, 238, 0.1);
         }
 
         .tab-content.active .rules-list li {
@@ -482,16 +455,17 @@
         }
 
         .rules-list li:hover {
-            border-color: var(--neon-pink);
-            background: rgba(255, 89, 199, 0.06);
+            border-color: var(--neon-primary);
+            background: radial-gradient(circle at 50% 0%, #112568, #050d26);
             transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 0 20px var(--neon-glow), inset 0 0 15px rgba(67, 97, 238, 0.3);
         }
 
         .cute-rule {
             color: var(--neon-pink);
             font-weight: bold;
+            text-shadow: 0 0 5px var(--neon-glow-pink);
         }
-
 
         .sparkle {
             position: fixed;
@@ -499,35 +473,42 @@
             height: 6px;
             border-radius: 50%;
             background: var(--neon-pink);
-            box-shadow: 0 0 8px var(--neon-glow);
+            box-shadow: 0 0 10px var(--neon-glow-pink);
             pointer-events: none;
             z-index: 9998;
             top: 0;
             left: 0;
         }
 
-
-        #scrollTopBtn {
-            display: none; 
+        .floating-buttons {
             position: fixed;
             bottom: 25px;
             right: 20px;
             z-index: 99;
-            background-color: rgba(255, 89, 199, 0.15);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid var(--neon-pink);
-            color: #ffffff;
-            cursor: pointer;
-            width: 50px;
-            height: 50px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .float-btn {
+            padding: 0 24px;
+            height: 48px;
+            font-size: 16px;
+            gap: 10px;
+        }
+
+        #scrollTopBtn {
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            font-size: 20px;
-            box-shadow: 0 4px 15px var(--neon-glow);
-            transition: opacity .45s var(--fluid-ease), transform .45s var(--fluid-ease);
+            padding: 0;
+            justify-content: center;
+            font-size: 18px;
             opacity: 0;
             pointer-events: none;
             transform: translateY(20px) scale(0.8);
+            transition: opacity .45s var(--fluid-ease), transform .45s var(--fluid-ease), background .4s ease, box-shadow .4s ease;
         }
 
         #scrollTopBtn.show {
@@ -536,14 +517,197 @@
             transform: translateY(0) scale(1);
         }
 
-        @media (min-width: 769px) {
-            #scrollTopBtn { display: none !important; }
+        @media (hover: none), (max-width: 768px) {
+            .float-btn, .avatar-link, .nav-btn, .social-btn, .puzzle-close, .puzzle-piece, .start-game-btn { cursor: pointer; }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+        .puzzle-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity .4s var(--fluid-ease), visibility .4s var(--fluid-ease);
         }
 
+        .puzzle-modal.open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .puzzle-container {
+            background: radial-gradient(circle at 50% 0%, #171d2b, #0d1117);
+            border: 1.5px solid var(--neon-primary);
+            box-shadow: 0 0 40px rgba(67, 97, 238, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            width: 95%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            transform: scale(0.95);
+            transition: transform .4s var(--fluid-ease);
+        }
+
+        .puzzle-modal.open .puzzle-container {
+            transform: scale(1);
+        }
+
+        .puzzle-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 24px;
+            cursor: none;
+            transition: color .3s ease;
+            z-index: 20; 
+        }
+
+        .puzzle-close:hover {
+            color: var(--neon-pink);
+            text-shadow: 0 0 8px var(--neon-glow-pink);
+        }
+
+        .puzzle-title {
+            font-family: var(--font-heading);
+            font-size: 22px;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #ffffff;
+            text-shadow: 0 0 10px var(--neon-glow);
+        }
+
+        .start-game-btn {
+            padding: 10px 24px;
+            font-size: 16px;
+            margin-top: 10px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .leaderboard-container {
+            width: 100%;
+            margin-top: 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1.5px solid rgba(67, 97, 238, 0.25);
+            text-align: center;
+        }
+
+        #bestRecordDisplay {
+            margin: 0;
+            color: var(--neon-primary);
+            font-family: var(--font-heading);
+            font-size: 18px;
+            text-shadow: 0 0 8px var(--neon-glow);
+        }
+
+        .puzzle-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: var(--text-main);
+            padding: 0 10px;
+        }
+
+        #puzzleRefImg {
+            width: 45px;
+            height: 45px;
+            border-radius: 6px;
+            border: 1.5px solid var(--neon-primary);
+            object-fit: cover;
+            box-shadow: 0 0 10px var(--neon-glow);
+        }
+
+        .jigsaw-board {
+            width: 320px;
+            height: 320px;
+            position: relative;
+            border-radius: 4px;
+            margin: 0 auto;
+            background: rgba(13, 17, 23, 0.6);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            border: 1.5px solid rgba(67, 97, 238, 0.4);
+        }
+
+        .drop-zone {
+            position: absolute;
+            box-sizing: border-box;
+            z-index: 1;
+        }
+
+        .jigsaw-tray {
+            width: 100%;
+            height: 220px;
+            background: rgba(13, 17, 23, 0.6);
+            border: 1.5px solid rgba(67, 97, 238, 0.2);
+            border-radius: 12px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .jigsaw-piece {
+            position: absolute;
+            cursor: none;
+            z-index: 10;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-drag: none;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+            transition: filter 0.2s;
+        }
+
+        .jigsaw-piece svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .jigsaw-piece.dragging {
+            z-index: 10001 !important;
+            filter: drop-shadow(0 10px 20px var(--neon-glow)) brightness(1.15);
+            transform: scale(1.08);
+        }
+
+        .jigsaw-piece.snapped {
+            z-index: 5;
+            filter: none;
+            pointer-events: none;
+        }
+
+        .puzzle-win-msg {
+            font-size: 16px;
+            color: var(--neon-pink);
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 0 0 8px var(--neon-glow-pink);
+        }
+
+        #winButtons {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+            width: 100%;
+            align-items: center;
+        }
 
         @media (max-width: 768px) {
             .container {
@@ -552,10 +716,8 @@
             }
 
             .nav-tabs { margin-bottom: 40px; gap: 10px; }
-            .nav-btn { padding: 10px 20px; font-size: 14px; cursor: pointer; }
+            .nav-btn { padding: 10px 20px; font-size: 14px; }
             .nav-btn i { font-size: 12px; }
-
-            .social-btn { cursor: pointer; }
 
             .profile-header {
                 flex-direction: column; 
@@ -593,35 +755,32 @@
             .rules-list { font-size: 15px; }
             .rules-list li { padding: 12px; margin-bottom: 12px; }
 
-            #scrollTopBtn {
-                display: flex;
-                align-items: center;
-                justify-content: center;
+            .jigsaw-board {
+                width: 280px;
+                height: 280px;
+            }
+            .jigsaw-tray {
+                height: 200px;
             }
         }
     </style>
 </head>
 <body>
 
-
-    <div class="cursor-glow" id="cursorGlow"></div>
+    <canvas id="fireTrailCanvas"></canvas>
     <div class="magic-cursor" id="magicCursor"></div>
 
     <div class="container">
         
-
         <nav class="nav-tabs reveal" id="navTabs">
-            <div class="nav-indicator" id="navIndicator"></div>
             <button class="nav-btn active" data-tab="home" onclick="openTab('home', this)">Обо мне <i class="fa-solid fa-heart"></i></button>
             <button class="nav-btn" data-tab="pc" onclick="openTab('pc', this)">Компик <i class="fa-solid fa-desktop"></i></button>
             <button class="nav-btn" data-tab="rules" onclick="openTab('rules', this)">Правила <i class="fa-solid fa-scroll"></i></button>
         </nav>
 
-
         <section id="home" class="tab-content active">
             <div class="home-wrapper">
                 
-
                 <div class="profile-header reveal" style="animation-delay:.08s">
                     <a href="https://www.twitch.tv/allssq" target="_blank" class="avatar-link" id="avatarLink">
                         <span class="avatar-ring"></span>
@@ -629,7 +788,6 @@
                     </a>
                     <h1>ALISSQ</h1>
                 </div>
-
 
                 <div class="social-section reveal" style="animation-delay:.16s">
                     <div class="social-grid">
@@ -644,14 +802,12 @@
                     </div>
                 </div>
 
-
                 <div class="home-description reveal" style="animation-delay:.24s">
                     <p>Привет! меня зовут Алиса, я неко ведьмочка, я очень болтливая, и я люблю играть в стратегии и пазлы, и писать музыку! </p>
                 </div>
 
             </div>
         </section>
-
 
         <section id="pc" class="tab-content">
             <h2 class="section-title">КОМПИК</h2>
@@ -683,7 +839,6 @@
             </table>
         </section>
 
-
         <section id="rules" class="tab-content">
             <h2 class="section-title">ПРАВИЛА</h2>
             <ul class="rules-list">
@@ -697,16 +852,54 @@
 
     </div>
 
+    <div class="floating-buttons">
+        <button class="float-btn" onclick="openPuzzleModal()">
+            <i class="fa-solid fa-puzzle-piece"></i> Собери Алиску
+        </button>
+        <button id="scrollTopBtn" class="float-btn" onclick="scrollToTop()" title="Вернуться наверх">
+            <i class="fa-solid fa-chevron-up"></i>
+        </button>
+    </div>
 
-    <button id="scrollTopBtn" onclick="scrollToTop()" title="Вернуться наверх">
-        <i class="fa-solid fa-chevron-up"></i>
-    </button>
+    <div class="puzzle-modal" id="puzzleModal">
+        <div class="puzzle-container">
+            <button class="puzzle-close" onclick="closePuzzleModal()"><i class="fa-solid fa-xmark"></i></button>
+
+            <div id="startScreen" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                <h3 class="puzzle-title">Собери Алиску</h3>
+                <button class="start-game-btn" onclick="startPuzzleGame()">Начать игру</button>
+
+                <div class="leaderboard-container">
+                    <h4 id="bestRecordDisplay">Лучший рекорд: --</h4>
+                </div>
+            </div>
+
+            <div id="gameScreen" style="display: none; width: 100%; flex-direction: column; align-items: center;">
+                <h3 class="puzzle-title">Собери Алиску</h3>
+                <div class="puzzle-info">
+                    <div style="display:flex; flex-direction:column; gap:5px;">
+                        <span id="puzzleProgress">Прогресс: 0/64</span>
+                        <span id="puzzleTimer">Время: 0с</span>
+                        <span id="puzzleBestTime" style="color: var(--neon-primary);">Лучшее время: --</span>
+                    </div>
+                    <img id="puzzleRefImg" src="" alt="Референс" />
+                </div>
+                
+                <div class="jigsaw-board" id="jigsawBoard"></div>
+                <div class="jigsaw-tray" id="jigsawTray"></div>
+                
+                <div class="puzzle-win-msg" id="puzzleWinMsg"></div>
+                <div id="winButtons">
+                    <a href="https://www.donationalerts.com/r/alissq" target="_blank" class="start-game-btn" style="text-decoration:none; text-align:center; width:100%; max-width:250px;">Забрать награду 🎁</a>
+                    <button class="start-game-btn" onclick="showStartScreen()" style="width:100%; max-width:250px;">Вернуться</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
-
         (function starParallax() {
             let posX = 0, posY = 0;
-            const speed = 0.0035; 
             let last = performance.now();
 
             function tick(now) {
@@ -723,81 +916,131 @@
             requestAnimationFrame(tick);
         })();
 
+        (function softFireTrail() {
+            if (window.matchMedia('(hover: none)').matches) return;
+            const canvas = document.getElementById('fireTrailCanvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            let trail = [];
+            const maxAge = 25; 
+            let lastMouse = { x: -100, y: -100 };
+
+            window.addEventListener('mousemove', e => {
+                let dist = Math.hypot(e.clientX - lastMouse.x, e.clientY - lastMouse.y);
+                let dx = e.clientX - lastMouse.x;
+                let dy = e.clientY - lastMouse.y;
+                
+                if (dist > 0.1 && lastMouse.x !== -100) {
+                    let steps = Math.ceil(dist / 2);
+                    for(let i = 1; i <= steps; i++) {
+                        trail.push({
+                            x: lastMouse.x + dx * (i / steps),
+                            y: lastMouse.y + dy * (i / steps),
+                            age: 0
+                        });
+                    }
+                } else if (lastMouse.x === -100) {
+                    trail.push({ x: e.clientX, y: e.clientY, age: 0 });
+                }
+                
+                lastMouse.x = e.clientX;
+                lastMouse.y = e.clientY;
+            });
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+
+                for (let i = 0; i < trail.length; i++) {
+                    trail[i].age += 1;
+                }
+
+                trail = trail.filter(p => p.age < maxAge);
+
+                if (trail.length > 1) {
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+
+                    for (let i = 1; i < trail.length; i++) {
+                        let p1 = trail[i - 1];
+                        let p2 = trail[i];
+                        
+                        if (Math.abs(p1.age - p2.age) > 5) continue;
+
+                        let progress = 1 - (p2.age / maxAge);
+                        if (progress < 0) progress = 0;
+
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(10, 10, 80, ${progress * 0.3})`;
+                        ctx.lineWidth = 18 * progress;
+                        ctx.stroke();
+
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(0, 0, 100, ${progress * 0.65})`;
+                        ctx.lineWidth = 5 * progress;
+                        ctx.stroke();
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
 
         (function magicCursor() {
             const cursor = document.getElementById('magicCursor');
-            const glow = document.getElementById('cursorGlow');
             if (!cursor || window.matchMedia('(hover: none)').matches) return;
 
             let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
             let cursorX = mouseX, cursorY = mouseY;
-            let glowX = mouseX, glowY = mouseY;
+            let initialized = false;
 
-            window.addEventListener('mousemove', (e) => {
+            window.addEventListener('pointermove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
+                if (!initialized) {
+                    cursorX = mouseX;
+                    cursorY = mouseY;
+                    cursor.style.opacity = '1';
+                    initialized = true;
+                }
+
+                const hoveredEl = document.elementFromPoint(mouseX, mouseY);
+                if (hoveredEl && hoveredEl.closest('a, button, .nav-btn, .social-btn, .float-btn, .start-game-btn, .puzzle-close')) {
+                    cursor.classList.add('hover');
+                } else {
+                    cursor.classList.remove('hover');
+                }
             });
 
             function lerp(a, b, n) { return a + (b - a) * n; }
 
             function animate() {
-                cursorX = lerp(cursorX, mouseX, 0.22);
-                cursorY = lerp(cursorY, mouseY, 0.22);
-                glowX = lerp(glowX, mouseX, 0.09);
-                glowY = lerp(glowY, mouseY, 0.09);
-
-                cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
-                glow.style.transform = `translate(${glowX}px, ${glowY}px) translate(-50%, -50%)`;
-
+                if (initialized) {
+                    cursorX = lerp(cursorX, mouseX, 0.4);
+                    cursorY = lerp(cursorY, mouseY, 0.4);
+                    cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate3d(-50%, -50%, 0)`;
+                }
                 requestAnimationFrame(animate);
             }
             requestAnimationFrame(animate);
-
-            const hoverables = document.querySelectorAll('a, button, .nav-btn, .social-btn');
-            hoverables.forEach(el => {
-                el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
-                el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
-            });
         })();
-
 
         window.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.reveal').forEach(el => {
                 requestAnimationFrame(() => el.classList.add('in'));
             });
-            positionIndicator(document.querySelector('.nav-btn.active'), false);
         });
-
-
-        function positionIndicator(btn, animated = true) {
-            const indicator = document.getElementById('navIndicator');
-            if (!btn || !indicator) return;
-            const navRect = btn.parentElement.getBoundingClientRect();
-            const btnRect = btn.getBoundingClientRect();
-
-            if (!animated) indicator.style.transition = 'none';
-            
-
-            indicator.style.width = btnRect.width + 'px';
-            indicator.style.height = btnRect.height + 'px';
-            
-
-            indicator.style.transform = `translate(${btnRect.left - navRect.left}px, ${btnRect.top - navRect.top}px)`;
-            
-            indicator.style.opacity = '1';
-            
-            if (!animated) {
-                requestAnimationFrame(() => {
-                    indicator.style.transition = '';
-                });
-            }
-        }
-
-        window.addEventListener('resize', () => {
-            const active = document.querySelector('.nav-btn.active');
-            positionIndicator(active, false);
-        });
-
 
         let tabSwitching = false;
 
@@ -811,7 +1054,6 @@
 
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            positionIndicator(btn, true);
 
             current.classList.remove('enter');
             current.classList.add('leave');
@@ -830,22 +1072,6 @@
             };
             current.addEventListener('animationend', onLeaveEnd);
         }
-
-
-        document.querySelectorAll('.social-btn, .nav-btn').forEach(el => {
-            el.addEventListener('click', function (e) {
-                const rect = this.getBoundingClientRect();
-                const span = document.createElement('span');
-                const size = Math.max(rect.width, rect.height) * 1.4;
-                span.className = 'ripple-span';
-                span.style.width = span.style.height = size + 'px';
-                span.style.left = (e.clientX - rect.left - size / 2) + 'px';
-                span.style.top = (e.clientY - rect.top - size / 2) + 'px';
-                this.appendChild(span);
-                span.addEventListener('animationend', () => span.remove());
-            });
-        });
-
 
         document.getElementById('avatarLink').addEventListener('click', function (e) {
             const rect = this.getBoundingClientRect();
@@ -880,9 +1106,7 @@
             }
         });
 
-
         let topButton = document.getElementById("scrollTopBtn");
-
         window.addEventListener('scroll', () => {
             if (document.body.scrollTop > 150 || document.documentElement.scrollTop > 150) {
                 topButton.classList.add("show"); 
@@ -892,10 +1116,366 @@
         });
 
         function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        const puzzleImages = [
+            'file/photo_2026-07-05_01-19-35.jpg',
+            'file/1.png',
+            'file/d2fee2ba-eecb-4e13-a8aa-95c0674d4886.png',
+            'file/image.png',
+            'file/SHgq5.jpg'
+        ];
+        
+        let currentPuzzleImage = '';
+        let puzzleSize = 8;
+        let totalPieces = puzzleSize * puzzleSize;
+        let piecesCompleted = 0;
+        let timerSeconds = 0;
+        let timerInterval = null;
+        let activePiece = null;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+
+        function updateBestRecordDisplay() {
+            let bestTime = localStorage.getItem('alissq_best_time');
+            let display = document.getElementById('bestRecordDisplay');
+            if (display) {
+                display.innerText = bestTime ? `Лучший рекорд: ${bestTime} сек` : `Лучший рекорд: --`;
+            }
+        }
+
+        function openPuzzleModal() {
+            document.getElementById('puzzleModal').classList.add('open');
+            showStartScreen();
+        }
+
+        function closePuzzleModal() {
+            document.getElementById('puzzleModal').classList.remove('open');
+            stopTimer();
+            
+            // Если деталь была в руках во время закрытия - сбрасываем
+            if (activePiece) {
+                document.body.classList.remove('hide-cursor-mode');
+                document.removeEventListener('pointermove', dragMove);
+                document.removeEventListener('pointerup', endDrag);
+                activePiece = null;
+            }
+
+            setTimeout(() => {
+                document.getElementById('jigsawBoard').innerHTML = '';
+                document.getElementById('jigsawTray').innerHTML = '';
+                // Удаляем все оставшиеся детали
+                document.querySelectorAll('.jigsaw-piece').forEach(p => p.remove());
+            }, 400);
+        }
+
+        function showStartScreen() {
+            document.getElementById('startScreen').style.display = 'flex';
+            document.getElementById('gameScreen').style.display = 'none';
+            document.getElementById('winButtons').style.display = 'none';
+            document.getElementById('puzzleWinMsg').innerText = '';
+            updateBestRecordDisplay();
+            stopTimer();
+            
+            // Очищаем зависшие детали при возврате в меню
+            if (activePiece) {
+                document.body.classList.remove('hide-cursor-mode');
+                document.removeEventListener('pointermove', dragMove);
+                document.removeEventListener('pointerup', endDrag);
+                activePiece = null;
+            }
+            
+            document.getElementById('jigsawBoard').innerHTML = '';
+            document.getElementById('jigsawTray').innerHTML = '';
+            document.querySelectorAll('.jigsaw-piece').forEach(p => p.remove());
+        }
+
+        function startPuzzleGame() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'flex';
+            
+            initJigsaw();
+        }
+
+        function getPiecePath(top, right, bottom, left) {
+            let d = "M 0 0 ";
+            if (top === 0) d += "L 100 0 ";
+            else if (top === 1) d += "L 35 0 C 35 -25, 65 -25, 65 0 L 100 0 ";
+            else d += "L 35 0 C 35 25, 65 25, 65 0 L 100 0 ";
+            
+            if (right === 0) d += "L 100 100 ";
+            else if (right === 1) d += "L 100 35 C 125 35, 125 65, 100 65 L 100 100 ";
+            else d += "L 100 35 C 75 35, 75 65, 100 65 L 100 100 ";
+            
+            if (bottom === 0) d += "L 0 100 ";
+            else if (bottom === 1) d += "L 65 100 C 65 125, 35 125, 35 100 L 0 100 ";
+            else d += "L 65 100 C 65 75, 35 75, 35 100 L 0 100 ";
+            
+            if (left === 0) d += "L 0 0 ";
+            else if (left === 1) d += "L 0 65 C -25 65, -25 35, 0 35 L 0 0 ";
+            else d += "L 0 65 C 25 65, 25 35, 0 35 L 0 0 ";
+            
+            d += "Z";
+            return d;
+        }
+
+        function initJigsaw() {
+            const board = document.getElementById('jigsawBoard');
+            const tray = document.getElementById('jigsawTray');
+            board.innerHTML = '';
+            tray.innerHTML = '';
+            
+            document.querySelectorAll('.jigsaw-piece').forEach(p => p.remove());
+            
+            currentPuzzleImage = puzzleImages[Math.floor(Math.random() * puzzleImages.length)];
+            document.getElementById('puzzleRefImg').src = currentPuzzleImage;
+            
+            piecesCompleted = 0;
+            timerSeconds = 0;
+            document.getElementById('puzzleProgress').innerText = `Прогресс: 0/${totalPieces}`;
+            document.getElementById('puzzleTimer').innerText = `Время: 0с`;
+            document.getElementById('puzzleWinMsg').innerHTML = '';
+            document.getElementById('winButtons').style.display = 'none';
+
+            let bestTime = localStorage.getItem('alissq_best_time');
+            document.getElementById('puzzleBestTime').innerText = bestTime ? `Лучшее время: ${bestTime}с` : `Лучшее время: --`;
+
+            stopTimer();
+            
+            let bSize = window.innerWidth <= 768 ? 280 : 320;
+            board.style.width = bSize + 'px';
+            board.style.height = bSize + 'px';
+            
+            let pSize = bSize / puzzleSize;
+
+            let pieces = [];
+            let vEdges = Array(8).fill().map(()=>Array(7).fill(0).map(()=>Math.random()>0.5?1:-1));
+            let hEdges = Array(7).fill().map(()=>Array(8).fill(0).map(()=>Math.random()>0.5?1:-1));
+            let sessionId = Date.now();
+
+            for(let r = 0; r < puzzleSize; r++) {
+                for(let c = 0; c < puzzleSize; c++) {
+                    let zone = document.createElement('div');
+                    zone.className = 'drop-zone';
+                    zone.style.width = pSize + 'px';
+                    zone.style.height = pSize + 'px';
+                    zone.style.left = (c * pSize) + 'px';
+                    zone.style.top = (r * pSize) + 'px';
+                    zone.dataset.r = r;
+                    zone.dataset.c = c;
+                    board.appendChild(zone);
+
+                    let topEdge = r === 0 ? 0 : -hEdges[r-1][c];
+                    let rightEdge = c === 7 ? 0 : vEdges[r][c];
+                    let bottomEdge = r === 7 ? 0 : hEdges[r][c];
+                    let leftEdge = c === 0 ? 0 : -vEdges[r][c-1];
+
+                    let pathD = getPiecePath(topEdge, rightEdge, bottomEdge, leftEdge);
+                    let clipId = `clip_${sessionId}_${r}_${c}`;
+
+                    let piece = document.createElement('div');
+                    piece.className = 'jigsaw-piece';
+                    piece.style.width = pSize + 'px';
+                    piece.style.height = pSize + 'px';
+                    piece.dataset.r = r;
+                    piece.dataset.c = c;
+                    
+                    piece.innerHTML = `
+                        <svg viewBox="-25 -25 150 150" style="position:absolute; top:-25%; left:-25%; width:150%; height:150%; pointer-events:none;">
+                            <defs>
+                                <clipPath id="${clipId}">
+                                    <path d="${pathD}" />
+                                </clipPath>
+                            </defs>
+                            <image href="${currentPuzzleImage}" width="800" height="800" x="${-c*100}" y="${-r*100}" clip-path="url(#${clipId})" preserveAspectRatio="none" pointer-events="none" />
+                            <path d="${pathD}" fill="none" stroke="rgba(67, 97, 238, 0.6)" stroke-width="1.5" pointer-events="none" />
+                        </svg>
+                    `;
+                    
+                    pieces.push(piece);
+                }
+            }
+
+            pieces.sort(() => Math.random() - 0.5);
+            
+            setTimeout(() => {
+                let trayRect = tray.getBoundingClientRect();
+                let maxW = Math.max(0, trayRect.width - pSize);
+                let maxH = Math.max(0, trayRect.height - pSize);
+
+                pieces.forEach(p => {
+                    tray.appendChild(p);
+                    p.style.left = (Math.random() * maxW) + 'px';
+                    p.style.top = (Math.random() * maxH) + 'px';
+                    p.addEventListener('pointerdown', startDrag);
+                });
+                startTimer();
+            }, 100);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timerSeconds++;
+                document.getElementById('puzzleTimer').innerText = `Время: ${timerSeconds}с`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+        }
+
+        function startDrag(e) {
+            if (e.button !== 0 && e.type !== 'touchstart') return;
+            activePiece = e.target.closest('.jigsaw-piece');
+            if (!activePiece) return;
+            
+            activePiece.classList.add('dragging');
+            document.body.classList.add('hide-cursor-mode');
+            
+            let pieceRect = activePiece.getBoundingClientRect();
+            dragOffsetX = e.clientX - pieceRect.left;
+            dragOffsetY = e.clientY - pieceRect.top;
+
+            let modal = document.getElementById('puzzleModal');
+            
+            activePiece.style.left = (e.clientX - modal.getBoundingClientRect().left - dragOffsetX) + 'px';
+            activePiece.style.top = (e.clientY - modal.getBoundingClientRect().top - dragOffsetY) + 'px';
+            modal.appendChild(activePiece);
+
+            document.addEventListener('pointermove', dragMove, {passive: false});
+            document.addEventListener('pointerup', endDrag);
+        }
+
+        function dragMove(e) {
+            if (!activePiece) return;
+            e.preventDefault(); 
+            
+            let modalRect = document.getElementById('puzzleModal').getBoundingClientRect();
+            activePiece.style.left = (e.clientX - modalRect.left - dragOffsetX) + 'px';
+            activePiece.style.top = (e.clientY - modalRect.top - dragOffsetY) + 'px';
+        }
+
+        function endDrag(e) {
+            if (!activePiece) return;
+            
+            document.body.classList.remove('hide-cursor-mode');
+            
+            let zones = document.querySelectorAll('.drop-zone');
+            let snapped = false;
+            
+            let pieceRect = activePiece.getBoundingClientRect();
+            let pcX = pieceRect.left + pieceRect.width / 2;
+            let pcY = pieceRect.top + pieceRect.height / 2;
+
+            zones.forEach(zone => {
+                if (zone.dataset.r === activePiece.dataset.r && zone.dataset.c === activePiece.dataset.c) {
+                    let zRect = zone.getBoundingClientRect();
+                    let zCx = zRect.left + zRect.width / 2;
+                    let zCy = zRect.top + zRect.height / 2;
+                    
+                    let dist = Math.hypot(pcX - zCx, pcY - zCy);
+
+                    if (dist < 20) {
+                        zone.appendChild(activePiece);
+                        
+                        activePiece.style.left = '0px';
+                        activePiece.style.top = '0px';
+                        activePiece.classList.remove('dragging');
+                        activePiece.classList.add('snapped');
+                        activePiece.removeEventListener('pointerdown', startDrag);
+                        snapped = true;
+                        
+                        piecesCompleted++;
+                        document.getElementById('puzzleProgress').innerText = `Прогресс: ${piecesCompleted}/${totalPieces}`;
+                        if (piecesCompleted === totalPieces) winGame();
+                    }
+                }
             });
+
+            if (!snapped) {
+                let container = document.querySelector('.puzzle-container');
+                let contRect = container.getBoundingClientRect();
+
+                if (e.clientX >= contRect.left && e.clientX <= contRect.right && 
+                    e.clientY >= contRect.top && e.clientY <= contRect.bottom) {
+                    
+                    container.appendChild(activePiece);
+                    activePiece.classList.remove('dragging');
+
+                    let pSize = activePiece.offsetWidth;
+                    let newX = e.clientX - contRect.left - dragOffsetX;
+                    let newY = e.clientY - contRect.top - dragOffsetY;
+
+                    newX = Math.max(0, Math.min(newX, contRect.width - pSize));
+                    newY = Math.max(0, Math.min(newY, contRect.height - pSize));
+                    
+                    activePiece.style.left = newX + 'px';
+                    activePiece.style.top = newY + 'px';
+
+                } else {
+                    let tray = document.getElementById('jigsawTray');
+                    tray.appendChild(activePiece);
+                    activePiece.classList.remove('dragging');
+                    
+                    let trayRect = tray.getBoundingClientRect();
+                    let pSize = activePiece.offsetWidth;
+                    let maxW = Math.max(0, trayRect.width - pSize);
+                    let maxH = Math.max(0, trayRect.height - pSize);
+                    
+                    activePiece.style.left = (Math.random() * maxW) + 'px';
+                    activePiece.style.top = (Math.random() * maxH) + 'px';
+                }
+            }
+
+            document.removeEventListener('pointermove', dragMove);
+            document.removeEventListener('pointerup', endDrag);
+            activePiece = null;
+        }
+
+        function winGame() {
+            stopTimer();
+            
+            let bestTime = localStorage.getItem('alissq_best_time');
+            let isNewRecord = false;
+            
+            if (!bestTime || timerSeconds < parseInt(bestTime)) {
+                localStorage.setItem('alissq_best_time', timerSeconds);
+                isNewRecord = true;
+            }
+
+            let msg = `🎉 Пазл собран за ${timerSeconds} секунд!`;
+            if (isNewRecord) {
+                msg += `<br><span style="color:#fff;">Новый личный рекорд! 🏆</span>`;
+            }
+
+            document.getElementById('puzzleWinMsg').innerHTML = msg;
+            document.getElementById('winButtons').style.display = 'flex';
+            
+            let board = document.getElementById('jigsawBoard');
+            let rect = board.getBoundingClientRect();
+            let cx = rect.left + rect.width / 2;
+            let cy = rect.top + rect.height / 2;
+            
+            for(let i=0; i<30; i++) {
+                setTimeout(() => {
+                    const sp = document.createElement('div');
+                    sp.className = 'sparkle';
+                    document.body.appendChild(sp);
+                    
+                    let angle = Math.random() * Math.PI * 2;
+                    let dist = 100 + Math.random() * 150;
+                    sp.style.left = cx + 'px';
+                    sp.style.top = cy + 'px';
+                    
+                    let anim = sp.animate([
+                        { transform: 'translate(-50%, -50%) scale(1.5)', opacity: 1 },
+                        { transform: `translate(${Math.cos(angle)*dist - 50}%, ${Math.sin(angle)*dist - 50}%) scale(0)`, opacity: 0 }
+                    ], { duration: 800 + Math.random()*500, easing: 'ease-out' });
+                    
+                    anim.onfinish = () => sp.remove();
+                }, i * 30);
+            }
         }
     </script>
 </body>
