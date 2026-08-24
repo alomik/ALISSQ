@@ -44,6 +44,14 @@
             align-items: center;
             overflow-x: hidden;
             cursor: none;
+        }
+
+        /* Оптимизированный слой для фона */
+        #parallax-bg {
+            position: fixed;
+            top: -600px; left: -600px; right: -600px; bottom: -600px;
+            z-index: 0;
+            pointer-events: none;
             background-image: 
                 radial-gradient(1.5px 1.5px at 10% 20%, #ffffff, transparent),
                 radial-gradient(2px 2px at 30% 65%, #4361EE, transparent),
@@ -61,8 +69,7 @@
                 250px 250px, 250px 250px, 250px 250px, 250px 250px, 250px 250px,
                 400px 400px, 400px 400px, 400px 400px, 400px 400px,
                 600px 600px, 600px 600px, 600px 600px;
-            background-position: 0 0;
-            will-change: background-position;
+            will-change: transform;
         }
 
         @media (hover: none) {
@@ -79,6 +86,7 @@
             z-index: 999996;
             mix-blend-mode: screen;
             transition: opacity 0.2s ease;
+            will-change: opacity;
         }
 
         .magic-cursor {
@@ -680,10 +688,10 @@
             pointer-events: none;
         }
 
+
         .jigsaw-piece.dragging {
             z-index: 10001 !important;
             filter: drop-shadow(0 10px 20px var(--neon-glow)) brightness(1.15);
-            transform: scale(1.08);
         }
 
         .jigsaw-piece.snapped {
@@ -766,6 +774,8 @@
     </style>
 </head>
 <body>
+
+    <div id="parallax-bg"></div>
 
     <canvas id="fireTrailCanvas"></canvas>
     <div class="magic-cursor" id="magicCursor"></div>
@@ -898,19 +908,22 @@
     </div>
 
     <script>
+
         (function starParallax() {
             let posX = 0, posY = 0;
             let last = performance.now();
+            const bg = document.getElementById('parallax-bg');
 
             function tick(now) {
                 const dt = now - last;
                 last = now;
                 posX -= dt * 0.006;
                 posY += dt * 0.012;
-                document.body.style.backgroundPosition =
-                    `${posX}px ${posY}px, ${posX}px ${posY}px, ${posX}px ${posY}px, ${posX}px ${posY}px, ${posX}px ${posY}px,
-                     ${posX*1.5}px ${posY*1.5}px, ${posX*1.5}px ${posY*1.5}px, ${posX*1.5}px ${posY*1.5}px, ${posX*1.5}px ${posY*1.5}px,
-                     ${posX*2}px ${posY*2}px, ${posX*2}px ${posY*2}px, ${posX*2}px ${posY*2}px`;
+                
+                if (posX <= -600) posX %= 600;
+                if (posY >= 600) posY %= 600;
+                
+                bg.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
                 requestAnimationFrame(tick);
             }
             requestAnimationFrame(tick);
@@ -997,6 +1010,7 @@
             animate();
         })();
 
+
         (function magicCursor() {
             const cursor = document.getElementById('magicCursor');
             if (!cursor || window.matchMedia('(hover: none)').matches) return;
@@ -1014,11 +1028,16 @@
                     cursor.style.opacity = '1';
                     initialized = true;
                 }
+            });
 
-                const hoveredEl = document.elementFromPoint(mouseX, mouseY);
-                if (hoveredEl && hoveredEl.closest('a, button, .nav-btn, .social-btn, .float-btn, .start-game-btn, .puzzle-close')) {
+            document.addEventListener('mouseover', (e) => {
+                if (e.target.closest('a, button, .nav-btn, .social-btn, .float-btn, .start-game-btn, .puzzle-close, .jigsaw-piece')) {
                     cursor.classList.add('hover');
-                } else {
+                }
+            });
+
+            document.addEventListener('mouseout', (e) => {
+                if (e.target.closest('a, button, .nav-btn, .social-btn, .float-btn, .start-game-btn, .puzzle-close, .jigsaw-piece')) {
                     cursor.classList.remove('hover');
                 }
             });
@@ -1027,9 +1046,12 @@
 
             function animate() {
                 if (initialized) {
-                    cursorX = lerp(cursorX, mouseX, 0.4);
-                    cursorY = lerp(cursorY, mouseY, 0.4);
-                    cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate3d(-50%, -50%, 0)`;
+
+                    if (Math.abs(cursorX - mouseX) > 0.1 || Math.abs(cursorY - mouseY) > 0.1) {
+                        cursorX = lerp(cursorX, mouseX, 0.4);
+                        cursorY = lerp(cursorY, mouseY, 0.4);
+                        cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate3d(-50%, -50%, 0)`;
+                    }
                 }
                 requestAnimationFrame(animate);
             }
@@ -1154,18 +1176,17 @@
             document.getElementById('puzzleModal').classList.remove('open');
             stopTimer();
             
-            // Если деталь была в руках во время закрытия - сбрасываем
             if (activePiece) {
                 document.body.classList.remove('hide-cursor-mode');
                 document.removeEventListener('pointermove', dragMove);
                 document.removeEventListener('pointerup', endDrag);
+                activePiece.style.transform = 'none';
                 activePiece = null;
             }
 
             setTimeout(() => {
                 document.getElementById('jigsawBoard').innerHTML = '';
                 document.getElementById('jigsawTray').innerHTML = '';
-                // Удаляем все оставшиеся детали
                 document.querySelectorAll('.jigsaw-piece').forEach(p => p.remove());
             }, 400);
         }
@@ -1178,11 +1199,11 @@
             updateBestRecordDisplay();
             stopTimer();
             
-            // Очищаем зависшие детали при возврате в меню
             if (activePiece) {
                 document.body.classList.remove('hide-cursor-mode');
                 document.removeEventListener('pointermove', dragMove);
                 document.removeEventListener('pointerup', endDrag);
+                activePiece.style.transform = 'none';
                 activePiece = null;
             }
             
@@ -1338,10 +1359,16 @@
             dragOffsetY = e.clientY - pieceRect.top;
 
             let modal = document.getElementById('puzzleModal');
+            let modalRect = modal.getBoundingClientRect();
             
-            activePiece.style.left = (e.clientX - modal.getBoundingClientRect().left - dragOffsetX) + 'px';
-            activePiece.style.top = (e.clientY - modal.getBoundingClientRect().top - dragOffsetY) + 'px';
+
+            let startX = e.clientX - modalRect.left - dragOffsetX;
+            let startY = e.clientY - modalRect.top - dragOffsetY;
+            
             modal.appendChild(activePiece);
+            activePiece.style.left = '0px';
+            activePiece.style.top = '0px';
+            activePiece.style.transform = `translate3d(${startX}px, ${startY}px, 0) scale(1.08)`;
 
             document.addEventListener('pointermove', dragMove, {passive: false});
             document.addEventListener('pointerup', endDrag);
@@ -1352,8 +1379,11 @@
             e.preventDefault(); 
             
             let modalRect = document.getElementById('puzzleModal').getBoundingClientRect();
-            activePiece.style.left = (e.clientX - modalRect.left - dragOffsetX) + 'px';
-            activePiece.style.top = (e.clientY - modalRect.top - dragOffsetY) + 'px';
+            let newX = e.clientX - modalRect.left - dragOffsetX;
+            let newY = e.clientY - modalRect.top - dragOffsetY;
+            
+
+            activePiece.style.transform = `translate3d(${newX}px, ${newY}px, 0) scale(1.08)`;
         }
 
         function endDrag(e) {
@@ -1381,6 +1411,7 @@
                         
                         activePiece.style.left = '0px';
                         activePiece.style.top = '0px';
+                        activePiece.style.transform = 'none'; 
                         activePiece.classList.remove('dragging');
                         activePiece.classList.add('snapped');
                         activePiece.removeEventListener('pointerdown', startDrag);
@@ -1402,6 +1433,7 @@
                     
                     container.appendChild(activePiece);
                     activePiece.classList.remove('dragging');
+                    activePiece.style.transform = 'none';
 
                     let pSize = activePiece.offsetWidth;
                     let newX = e.clientX - contRect.left - dragOffsetX;
@@ -1417,6 +1449,7 @@
                     let tray = document.getElementById('jigsawTray');
                     tray.appendChild(activePiece);
                     activePiece.classList.remove('dragging');
+                    activePiece.style.transform = 'none';
                     
                     let trayRect = tray.getBoundingClientRect();
                     let pSize = activePiece.offsetWidth;
